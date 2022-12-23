@@ -30,6 +30,7 @@ func main() {
 	r := gin.Default()
 	port := ":8000" //или в .env
 
+	//Принимать файлы через json {image:string} base64string
 	r.POST("/recieve_base64_jpg", func(c *gin.Context) {
 		req := Request{}
 		resp := Responce{}
@@ -78,6 +79,7 @@ func main() {
 
 	})
 
+	//Принимать бинарные файлы key="image"
 	r.POST("/recieve_binary", func(c *gin.Context) {
 		resp := Responce{}
 		file, err := c.FormFile("image")
@@ -125,6 +127,7 @@ func main() {
 
 	})
 
+	//спискок всех загруженных файлов
 	r.GET("/file_list", func(c *gin.Context) {
 		files, err := ioutil.ReadDir("d:\\some_folder\\media\\")
 		resp := Responce{}
@@ -159,6 +162,7 @@ func main() {
 		c.JSON(http.StatusOK, resp)
 	})
 
+	// Отдавать файлы клиенту.
 	r.GET("/file_get/:name", func(c *gin.Context) {
 		type FileName struct {
 			Name string `uri:"name" binding:"required"`
@@ -183,6 +187,7 @@ func main() {
 	// если true то ++
 	// если false return errors.New("превышен лимит")
 	// получения листа r.GET("/file_list" условия < 100
+	// defer счетчик --
 
 	r.Run(port)
 }
